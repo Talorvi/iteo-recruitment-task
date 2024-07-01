@@ -41,7 +41,7 @@ class OrderValidationService
         $errors = [];
 
         // Check if the order consists of self::MIN_PRODUCTS products
-        if (count($orderDTO->getProductDTOs()) <= self::MIN_PRODUCTS) {
+        if (count($orderDTO->getProductDTOs()) < self::MIN_PRODUCTS) {
             $errors[] = sprintf('Order must consist of at least %d products.', self::MIN_PRODUCTS);
         }
 
