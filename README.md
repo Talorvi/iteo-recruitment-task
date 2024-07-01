@@ -44,6 +44,14 @@ The order contract looks like that:
 }
 ```
 
+### Task 36: Additional order validation
+
+Valid order must meet the following conditions:
+
+- It must contain at least 5 products.
+- Its weight must not exceed 24 tons.
+- The client's balance must be positive - maybe it should be greater than order total
+
 ## Installation instructions:
 
 #### Docker:
