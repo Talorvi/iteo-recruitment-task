@@ -44,13 +44,26 @@ The order contract looks like that:
 }
 ```
 
+```
+{ADDRESS}/api/order [POST]
+```
+
 ### Task 36: Additional order validation
 
 Valid order must meet the following conditions:
 
 - It must contain at least 5 products.
 - Its weight must not exceed 24 tons.
-- The client's balance must be positive - maybe it should be greater than order total
+- The client's balance must be positive after transaction
+
+### Task 37: Adding new clients
+
+The system provides an endpoint where the CRM will send information about new clients along with their initial balance.
+The contract looks exactly the same as in Task 34.
+
+```
+{ADDRESS}/api/client [POST]
+```
 
 ## Installation instructions:
 
