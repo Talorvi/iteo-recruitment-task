@@ -85,6 +85,14 @@ class OrderService
         }
     }
 
+    // TODO: add tests
+    public function calculateOrderTotal(OrderDTO $orderDTO): float
+    {
+        return array_reduce($orderDTO->getProductDTOs(), function ($carry, $productDTO) {
+            return $carry + $productDTO->getPrice() * $productDTO->getQuantity();
+        }, 0);
+    }
+
     public function saveOrder(Order $order): void
     {
         $this->entityManager->persist($order);
