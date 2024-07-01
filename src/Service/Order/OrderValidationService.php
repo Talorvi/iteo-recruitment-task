@@ -24,7 +24,7 @@ class OrderValidationService
     {
         $errors = $this->validator->validate($orderDTO);
         if (count($errors) > 0) {
-            return [(string) $errors];
+            return [(string)$errors];
         }
 
         // Additional business validation
@@ -46,19 +46,23 @@ class OrderValidationService
         }
 
         // Check if the total weight is less than self::MAX_TOTAL_WEIGHT
-        $totalWeight = array_reduce($orderDTO->getProductDTOs(), function($carry, $productDTO) {
+        $totalWeight = array_reduce($orderDTO->getProductDTOs(), function ($carry, $productDTO) {
             return $carry + $productDTO->getWeight() * $productDTO->getQuantity();
         }, 0);
         if ($totalWeight >= self::MAX_TOTAL_WEIGHT) {
             $errors[] = sprintf('Total weight of products must be less than %d.', self::MAX_TOTAL_WEIGHT);
         }
 
-        // Check if the client balance is positive
+        // Check if the client balance is positive and sufficient to cover the order total
         $clientId = $orderDTO->getClientId();
         $clientBalance = $this->clientService->getClient($clientId)->getBalance();
 
-        if ($clientBalance <= 0) {
-            $errors[] = 'Client balance must be positive.';
+        $totalCost = array_reduce($orderDTO->getProductDTOs(), function ($carry, $productDTO) {
+            return $carry + $productDTO->getPrice() * $productDTO->getQuantity();
+        }, 0);
+
+        if ($clientBalance < $totalCost) {
+            $errors[] = 'Client balance must be greater than or equal to the total order cost.';
         }
 
         return $errors;
