@@ -46,11 +46,17 @@ class Client
         return $this;
     }
 
+    /**
+     * Returns Client balance without specified currency
+     */
     public function getBalance(): ?float
     {
         return $this->balance;
     }
 
+    /**
+     * Sets Client balance without specified currency
+     */
     public function setBalance(float $balance): static
     {
         $this->balance = $balance;
