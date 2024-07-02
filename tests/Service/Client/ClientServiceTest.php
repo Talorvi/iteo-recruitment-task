@@ -55,7 +55,7 @@ class ClientServiceTest extends TestCase
     public function testCreateClient()
     {
         $clientId = Uuid::v4();
-        $clientDTO = new ClientDTO($clientId, 'Test Client', 100.0);
+        $clientDTO = new ClientDTO($clientId, 'Test Client', 100);
 
         $this->entityManager->expects($this->once())
             ->method('persist')

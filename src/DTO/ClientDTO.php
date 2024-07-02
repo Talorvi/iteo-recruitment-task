@@ -15,11 +15,11 @@ class ClientDTO
     private string $name;
 
     #[Assert\NotBlank]
-    #[Assert\Type('float')]
+    #[Assert\Type('int')]
     #[Assert\PositiveOrZero]
-    private float $balance;
+    private int $balance;
 
-    public function __construct(?Uuid $clientId, string $name, float $balance)
+    public function __construct(?Uuid $clientId, string $name, int $balance)
     {
         $this->clientId = $clientId;
         $this->name = $name;
@@ -36,7 +36,11 @@ class ClientDTO
         return $this->name;
     }
 
-    public function getBalance(): float
+    /**
+     * The amount is expressed as an integer without a currency unit.
+     * For example, if a client has 55.26 in their account, the contract expects 5526.
+     */
+    public function getBalance(): int
     {
         return $this->balance;
     }

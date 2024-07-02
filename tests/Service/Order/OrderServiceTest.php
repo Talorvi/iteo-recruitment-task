@@ -174,4 +174,28 @@ class OrderServiceTest extends TestCase
 
         $this->assertEquals(400, $total);
     }
+
+    public function testCalculateOrderTotalWeight()
+    {
+        $productDTO1 = new ProductDTO('001', 1, 100, 10);
+        $productDTO2 = new ProductDTO('002', 2, 150, 20);
+
+        $orderDTO = new OrderDTO(Uuid::v4(), Uuid::v4(), [$productDTO1, $productDTO2]);
+
+        $totalWeight = $this->orderService->calculateOrderTotalWeight($orderDTO);
+
+        $this->assertEquals(50, $totalWeight);
+    }
+
+    public function testCalculateProductNumberTotal()
+    {
+        $productDTO1 = new ProductDTO('001', 1, 100, 10);
+        $productDTO2 = new ProductDTO('002', 2, 150, 20);
+
+        $orderDTO = new OrderDTO(Uuid::v4(), Uuid::v4(), [$productDTO1, $productDTO2]);
+
+        $productNumberTotal = $this->orderService->calculateProductNumberTotal($orderDTO);
+
+        $this->assertEquals(3, $productNumberTotal);
+    }
 }

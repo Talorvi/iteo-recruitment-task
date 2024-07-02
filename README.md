@@ -11,11 +11,12 @@ Client balance information is managed with the following data contract:
 {
   "clientId": "uuid",
   "name": "string",
-  "balance": "float"
+  "balance": "int"
 }
 ```
 
-*Note: The balance field has been updated to a float to accommodate operations involving decimal numbers.*
+*Note: The balance field has been updated to float in the system to accommodate operations involving decimal numbers.
+System converts the balance from int to float.*
 
 ### Task 35: Sending order to ERP
 
