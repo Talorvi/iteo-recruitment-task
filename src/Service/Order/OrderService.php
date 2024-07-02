@@ -92,6 +92,20 @@ class OrderService
         }, 0);
     }
 
+    public function calculateOrderTotalWeight(OrderDTO $orderDTO): float
+    {
+        return array_reduce($orderDTO->getProductDTOs(), function ($carry, $productDTO) {
+            return $carry + $productDTO->getWeight() * $productDTO->getQuantity();
+        }, 0);
+    }
+
+    public function calculateProductNumberTotal(OrderDTO $orderDTO): int
+    {
+        return array_reduce($orderDTO->getProductDTOs(), function ($carry, $productDTO) {
+            return $carry + $productDTO->getQuantity();
+        }, 0);
+    }
+
     public function saveOrder(Order $order): void
     {
         $this->entityManager->persist($order);

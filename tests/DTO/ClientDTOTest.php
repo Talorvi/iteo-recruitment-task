@@ -20,7 +20,7 @@ class ClientDTOTest extends KernelTestCase
     public function testValidClientDTO()
     {
         $clientId = Uuid::v4();
-        $clientDTO = new ClientDTO($clientId, 'Test Client', 100.0);
+        $clientDTO = new ClientDTO($clientId, 'Test Client', 100);
 
         $errors = $this->validator->validate($clientDTO);
         $this->assertCount(0, $errors, "Expected no validation errors for a valid ClientDTO.");
@@ -29,7 +29,7 @@ class ClientDTOTest extends KernelTestCase
     public function testClientDTOWithInvalidName()
     {
         $clientId = Uuid::v4();
-        $clientDTO = new ClientDTO($clientId, '', 100.0);
+        $clientDTO = new ClientDTO($clientId, '', 100);
 
         $errors = $this->validator->validate($clientDTO);
         $this->assertGreaterThan(0, $errors->count(), "Expected validation errors for empty name.");
@@ -47,7 +47,7 @@ class ClientDTOTest extends KernelTestCase
     public function testClientDTOWithNegativeBalance()
     {
         $clientId = Uuid::v4();
-        $clientDTO = new ClientDTO($clientId, 'Test Client', -100.0);
+        $clientDTO = new ClientDTO($clientId, 'Test Client', -100);
 
         $errors = $this->validator->validate($clientDTO);
         $this->assertGreaterThan(0, $errors->count(), "Expected validation errors for negative balance.");

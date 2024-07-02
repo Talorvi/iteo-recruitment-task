@@ -6,24 +6,25 @@ use App\DTO\OrderDTO;
 use App\DTO\ProductDTO;
 use App\Entity\Client;
 use App\Service\Client\ClientService;
+use App\Service\Order\OrderService;
 use App\Service\Order\OrderValidationService;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Uid\Uuid;
 use Symfony\Component\Validator\Validation;
-use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class OrderValidationServiceTest extends TestCase
 {
-    private ValidatorInterface $validator;
     private MockObject $clientService;
+    private MockObject $orderService;
     private OrderValidationService $orderValidationService;
 
     protected function setUp(): void
     {
-        $this->validator = Validation::createValidatorBuilder()->getValidator();
+        $validator = Validation::createValidatorBuilder()->getValidator();
         $this->clientService = $this->createMock(ClientService::class);
-        $this->orderValidationService = new OrderValidationService($this->validator, $this->clientService);
+        $this->orderService = $this->createMock(OrderService::class);
+        $this->orderValidationService = new OrderValidationService($validator, $this->clientService, $this->orderService);
     }
 
     public function testValidateOrderDTOValid()
@@ -42,6 +43,10 @@ class OrderValidationServiceTest extends TestCase
             new ProductDTO('005', 1, 500.0, 50.0)
         ];
         $orderDTO = new OrderDTO(Uuid::v4(), $clientId, $productDTOs);
+
+        $this->orderService->method('calculateOrderTotal')->with($orderDTO)->willReturn(1500.0);
+        $this->orderService->method('calculateOrderTotalWeight')->with($orderDTO)->willReturn(150.0);
+        $this->orderService->method('calculateProductNumberTotal')->with($orderDTO)->willReturn(5);
 
         $errors = $this->orderValidationService->validateOrderDTO($orderDTO);
 
@@ -65,6 +70,10 @@ class OrderValidationServiceTest extends TestCase
         ];
         $orderDTO = new OrderDTO(Uuid::v4(), $clientId, $productDTOs);
 
+        $this->orderService->method('calculateOrderTotal')->with($orderDTO)->willReturn(1500.0);
+        $this->orderService->method('calculateOrderTotalWeight')->with($orderDTO)->willReturn(150.0);
+        $this->orderService->method('calculateProductNumberTotal')->with($orderDTO)->willReturn(5);
+
         $errors = $this->orderValidationService->validateOrderDTO($orderDTO);
 
         $this->assertCount(1, $errors);
@@ -86,6 +95,10 @@ class OrderValidationServiceTest extends TestCase
             new ProductDTO('004', 1, 400.0, 40.0)
         ];
         $orderDTO = new OrderDTO(Uuid::v4(), $clientId, $productDTOs);
+
+        $this->orderService->method('calculateOrderTotal')->with($orderDTO)->willReturn(1000.0);
+        $this->orderService->method('calculateOrderTotalWeight')->with($orderDTO)->willReturn(100.0);
+        $this->orderService->method('calculateProductNumberTotal')->with($orderDTO)->willReturn(4);
 
         $errors = $this->orderValidationService->validateOrderDTO($orderDTO);
 
@@ -109,6 +122,10 @@ class OrderValidationServiceTest extends TestCase
             new ProductDTO('005', 1, 500.0, 10000.0)
         ];
         $orderDTO = new OrderDTO(Uuid::v4(), $clientId, $productDTOs);
+
+        $this->orderService->method('calculateOrderTotal')->with($orderDTO)->willReturn(1500.0);
+        $this->orderService->method('calculateOrderTotalWeight')->with($orderDTO)->willReturn(50000.0);
+        $this->orderService->method('calculateProductNumberTotal')->with($orderDTO)->willReturn(5);
 
         $errors = $this->orderValidationService->validateOrderDTO($orderDTO);
 

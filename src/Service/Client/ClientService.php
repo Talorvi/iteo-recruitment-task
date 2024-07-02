@@ -32,7 +32,8 @@ class ClientService
 
         $client->setClientId($clientId);
         $client->setName($clientDTO->getName());
-        $client->setBalance($clientDTO->getBalance());
+        $balance = round($clientDTO->getBalance()/100, 2);
+        $client->setBalance($balance);
 
         $this->entityManager->persist($client);
         $this->entityManager->flush();
