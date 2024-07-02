@@ -38,7 +38,6 @@ class ClientService
         $this->entityManager->flush();
     }
 
-    // TODO: add tests
     public function subtractFromClientBalance(string $clientId, float $totalCost): void
     {
         $client = $this->getClient($clientId);

@@ -85,7 +85,6 @@ class OrderService
         }
     }
 
-    // TODO: add tests
     public function calculateOrderTotal(OrderDTO $orderDTO): float
     {
         return array_reduce($orderDTO->getProductDTOs(), function ($carry, $productDTO) {
