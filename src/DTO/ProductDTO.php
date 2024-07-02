@@ -35,19 +35,9 @@ class ProductDTO
         return $this->productId;
     }
 
-    public function setProductId(string $productId): void
-    {
-        $this->productId = $productId;
-    }
-
     public function getQuantity(): int
     {
         return $this->quantity;
-    }
-
-    public function setQuantity(int $quantity): void
-    {
-        $this->quantity = $quantity;
     }
 
     public function getPrice(): float
@@ -55,18 +45,8 @@ class ProductDTO
         return $this->price;
     }
 
-    public function setPrice(float $price): void
-    {
-        $this->price = $price;
-    }
-
     public function getWeight(): float
     {
         return $this->weight;
-    }
-
-    public function setWeight(float $weight): void
-    {
-        $this->weight = $weight;
     }
 }

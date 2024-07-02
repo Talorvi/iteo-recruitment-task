@@ -37,4 +37,14 @@ class ClientService
         $this->entityManager->persist($client);
         $this->entityManager->flush();
     }
+
+    public function subtractFromClientBalance(string $clientId, float $totalCost): void
+    {
+        $client = $this->getClient($clientId);
+        if ($client) {
+            $newBalance = $client->getBalance() - $totalCost;
+            $client->setBalance($newBalance);
+            $this->entityManager->persist($client);
+        }
+    }
 }

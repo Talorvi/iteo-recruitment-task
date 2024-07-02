@@ -23,8 +23,8 @@ This task involves sending orders to an ERP system based on requests from the fr
 
 #### Assumptions:
 
-- The frontend uses products from our system which integrates with the ERP to fetch product data.
-- Product availability checks are skipped
+- The frontend uses products from our system which will integrate with the ERP to fetch product data.
+- Product availability checks are skipped.
 - Products can have different weights and prices than those recorded in the system. Validations are in place to ensure the integrity of weight, price, and quantity.
 - Orders received from the frontend with null as order ID will have IDs generated during processing (or potentially by the ERP, depending on the strategy).
 
@@ -64,6 +64,11 @@ The contract looks exactly the same as in Task 34.
 ```
 {ADDRESS}/api/client [POST]
 ```
+
+### Task 38: Subtract order total from client balance
+
+The system automatically subtracts the amount from the client's balance after processing the order.
+To ensure accurate processing, transactions are used.
 
 ## Installation instructions:
 
@@ -109,9 +114,66 @@ docker compose exec php ./vendor/bin/phpunit
 ERP_URL=https://example-erp.com/api/
 ```
 
-#### Helper commands to populate the database
+#### Helper commands to populate the database for testing purposes
 
 ```
 docker compose exec php php bin/console app:create-clients 5
 docker compose exec php php bin/console app:create-products 15
 ```
+
+#### Postman collection
+
+In the repository there is `iteo_recruitment_task.postman_collection.json` file which can be imported to postman for testing purposes.
+
+## Project structure
+
+The project is organized into several directories, each with a specific responsibility in the application. Below is an overview of the structure and the purpose of each directory and its files.
+
+### Command
+Contains commands for populating the database with initial data.
+
+- `AppCreateClientsCommand.php`: Command to create and populate clients in the database.
+- `AppCreateProductsCommand.php`: Command to create and populate products in the database.
+
+### Controller
+Holds the controllers responsible for handling HTTP requests.
+
+- `ClientController.php`: Manages client-related requests, such as creating a new client.
+- `OrderController.php`: Manages order-related requests, including creating new orders and processing them.
+
+### DTO (Data Transfer Objects)
+Defines the data structures for transferring data between different layers of the application.
+
+- `ClientDTO.php`: Defines the structure for client data transfer objects.
+- `OrderDTO.php`: Defines the structure for order data transfer objects.
+- `ProductDTO.php`: Defines the structure for product data transfer objects.
+
+### Entity
+Contains the entity classes that map to the database tables.
+
+- `Client.php`: Entity representing a client.
+- `Order.php`: Entity representing an order.
+- `OrderProduct.php`: Entity representing the relationship between orders and products.
+- `Product.php`: Entity representing a product.
+
+### Repository
+Holds the repository classes for accessing and managing the data in the database.
+
+- `ClientRepository.php`: Repository for client entities.
+- `OrderRepository.php`: Repository for order entities.
+- `OrderProductRepository.php`: Repository for order-product relationship entities.
+- `ProductRepository.php`: Repository for product entities.
+
+### Service
+Contains the business logic and services used by the controllers.
+
+- Client
+  - `ClientService.php`: Provides methods to manage client-related operations, such as fetching and creating clients.
+- ERP
+  - `ErpIntegrationService.php`: Handles the integration with the ERP system.
+- Order
+    - `OrderDtoConversionService.php`: Converts entities to DTOs and vice versa.
+    - `OrderService.php`: Provides methods to manage order-related operations, such as creating orders and processing order products.
+    - `OrderValidationService.php`: Validates the orders against defined business rules.
+- Product
+    - `ProductService.php`: Provides methods to manage product-related operations.

@@ -66,4 +66,43 @@ class ClientServiceTest extends TestCase
 
         $this->clientService->createClient($clientDTO);
     }
+
+    public function testSubtractFromClientBalance()
+    {
+        $clientId = Uuid::v4();
+        $client = new Client();
+        $client->setClientId($clientId);
+        $client->setBalance(150.0);
+
+        $this->clientRepository->expects($this->once())
+            ->method('find')
+            ->with($clientId->toRfc4122())
+            ->willReturn($client);
+
+        $this->entityManager->expects($this->once())
+            ->method('persist')
+            ->with($client);
+
+        $this->clientService->subtractFromClientBalance($clientId->toRfc4122(), 50.0);
+
+        $this->assertEquals(100.0, $client->getBalance());
+    }
+
+    public function testSubtractFromClientBalanceClientNotFound()
+    {
+        $clientId = Uuid::v4();
+
+        $this->clientRepository->expects($this->once())
+            ->method('find')
+            ->with($clientId->toRfc4122())
+            ->willReturn(null);
+
+        $this->entityManager->expects($this->never())
+            ->method('persist');
+
+        $this->entityManager->expects($this->never())
+            ->method('flush');
+
+        $this->clientService->subtractFromClientBalance($clientId->toRfc4122(), 50.0);
+    }
 }

@@ -36,28 +36,13 @@ class OrderDTO
         return $this->orderId;
     }
 
-    public function setOrderId(?Uuid $orderId): void
-    {
-        $this->orderId = $orderId;
-    }
-
     public function getClientId(): Uuid
     {
         return $this->clientId;
     }
 
-    public function setClientId(Uuid $clientId): void
-    {
-        $this->clientId = $clientId;
-    }
-
     public function getProductDTOs(): array
     {
         return $this->products;
-    }
-
-    public function setProductDTOs(array $products): void
-    {
-        $this->products = $products;
     }
 }
